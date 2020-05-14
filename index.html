@@ -19,6 +19,7 @@
       </li>
       </ul>
     </div>
+    <button @click="changeFacingMode()">change</button>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -29,25 +30,44 @@
         video: {},
         canvas: {},
         captures: [],
-        version: 'Rear Camera',
+        version: 'change facing mode',
+        front: false,
+      },
+      computed: {
+        constraints() {
+          return { video: { facingMode: (this.front? "user" : { exact: "environment" } ) } }
+        },
       },
       mounted () {
         this.video = this.$refs.video
+
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-          
-          navigator.mediaDevices.getUserMedia({ video: { facingMode: { exact: "environment" } } }).then(stream => {
-            this.video.srcObject = stream
-            this.video.play()
-          })
+          this._playVideo()
         }
       },
       methods: {
+        changeFacingMode () {
+          this.front = !this.front
+          this._playVideo()
+        },
         capture () {
           this.canvas = this.$refs.canvas
           this.canvas.getContext('2d').drawImage(this.video, 0, 0, 640, 480)
           this.captures.push(this.canvas.toDataURL('image/png'))
           console.log(this.captures)
-        }
+        },
+        _playVideo () {
+          if(this.video.srcObject){
+            this.video.srcObject.getVideoTracks().forEach(video => {
+              video.stop();
+            });
+          }
+
+          navigator.mediaDevices.getUserMedia(this.constraints).then(stream => {
+            this.video.srcObject = stream
+            this.video.play()
+          })
+        },
       }
     });
   </script>
