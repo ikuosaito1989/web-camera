@@ -2,6 +2,7 @@
 <html>
 
 <head>
+  <link rel="stylesheet" href="https://yarnpkg.com/en/package/normalize.css">
 </head>
 
 <body>
@@ -12,11 +13,10 @@
       <button style="width: 100%;height: 100px;background: greenyellow;" color="info" id="snap" v-on:click="capture()">撮る</button>
       <button style="width: 100%;height: 100px;background: darkgray; margin-top: 20px;" @click="changeFacingMode()">カメラ切り替え</button>
       <canvas ref="canvas" id="canvas" width="640" height="480"></canvas>
-      <ul>
-      <li class="capture" v-for="c in captures" v-bind:key="c.d">
-        <img v-bind:src="c" />
-      </li>
-      </ul>
+      
+      <div class="capture" v-for="c in captures" v-bind:key="c.d">
+        <img v-bind:src="c"  width="100%" height="100%"/>
+      </div>
     </div>
     
   </div>
