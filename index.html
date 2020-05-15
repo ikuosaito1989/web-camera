@@ -29,12 +29,19 @@
         video: {},
         canvas: {},
         captures: [],
-        version: 'Set the size of the video to canvas',
+        version: 'add aspectRatio',
         front: false,
       },
       computed: {
         constraints() {
-          return { video: { facingMode: (this.front? { exact: "environment" } : "user" ) } }
+          return { 
+            video: { 
+              facingMode: (this.front? { exact: "environment" } : "user" ) ,
+              width: 1280,
+              height: 720,
+              aspectRatio: 3/2
+            }
+          }
         },
       },
       mounted () {
@@ -51,10 +58,10 @@
         },
         capture () {
           this.canvas = this.$refs.canvas
-          this.canvas.height = this.video.clientHeight
-          this.canvas.width = this.video.clientWidth 
-          this.canvas.getContext('2d').drawImage(this.video, 0, 0, this.video.clientWidth, this.video.clientHeight)
-          this.captures.push(this.canvas.toDataURL('image/png'))
+          this.canvas.height = 720
+          this.canvas.width = 1280
+          this.canvas.getContext('2d').drawImage(this.video, 0, 0, 1280, 720)
+          this.captures.push(this.canvas.toDataURL('image/jpeg'))
           console.log(this.captures)
         },
         _playVideo () {
