@@ -58,9 +58,9 @@
         },
         capture () {
           this.canvas = this.$refs.canvas
-          this.canvas.height = 1000
-          this.canvas.width = 750
-          this.canvas.getContext('2d').drawImage(this.video, 0, 0, 750, 1000)
+          this.canvas.height = this.video.clientHeight
+          this.canvas.width = this.video.clientWidth
+          this.canvas.getContext('2d').drawImage(this.video, 0, 0, this.video.clientWidth, this.video.clientHeight)
           this.captures.push(this.canvas.toDataURL('image/jpeg'))
           console.log(this.captures)
         },
