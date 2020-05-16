@@ -29,7 +29,7 @@
         video: {},
         canvas: {},
         captures: [],
-        version: 'delete aspectRatio',
+        version: 'change size',
         front: false,
       },
       computed: {
@@ -37,8 +37,9 @@
           return { 
             video: { 
               facingMode: (this.front? { exact: "environment" } : "user" ) ,
-              width: 1280,
-              height: 720,
+              width: { ideal: 1000 },
+              height: { ideal: 750 },
+              aspectRatio: 4/3
             }
           }
         },
@@ -57,20 +58,22 @@
         },
         capture () {
           this.canvas = this.$refs.canvas
-          this.canvas.height = 720
-          this.canvas.width = 1280
-          this.canvas.getContext('2d').drawImage(this.video, 0, 0, 1280, 720)
+          this.canvas.height = 1280
+          this.canvas.width = 720
+          this.canvas.getContext('2d').drawImage(this.video, 0, 0, 720, 1280)
           this.captures.push(this.canvas.toDataURL('image/jpeg'))
           console.log(this.captures)
         },
         _playVideo () {
           if(this.video.srcObject){
             this.video.srcObject.getVideoTracks().forEach(video => {
+              console.log(video.getCapabilities())
               video.stop();
             });
           }
 
           navigator.mediaDevices.getUserMedia(this.constraints).then(stream => {
+            console.log(stream)
             this.video.srcObject = stream
             this.video.play()
           })
