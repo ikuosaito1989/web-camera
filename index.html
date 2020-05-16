@@ -29,7 +29,7 @@
         video: {},
         canvas: {},
         captures: [],
-        version: 'change aspectRatio',
+        version: 'add window.devicePixelRatio',
         front: false,
       },
       computed: {
@@ -58,13 +58,17 @@
         },
         capture () {
           this.canvas = this.$refs.canvas
-          this.canvas.height = this.video.clientHeight
-          this.canvas.width = this.video.clientWidth
-          this.canvas.getContext('2d').drawImage(this.video, 0, 0, this.video.clientWidth, this.video.clientHeight)
+          var scale = window.devicePixelRatio;
+          alert(scale)
+          this.canvas.height = this.video.clientHeight * scale
+          this.canvas.width = this.video.clientWidth * scale
+          console.log(scale)
+          this.canvas.getContext('2d').drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height)
           this.captures.push(this.canvas.toDataURL('image/jpeg'))
           console.log(this.captures)
         },
         _playVideo () {
+          console.log('devicePixelRatio ->', window.devicePixelRatio)
           if(this.video.srcObject){
             this.video.srcObject.getVideoTracks().forEach(video => {
               console.log(video.getCapabilities())
