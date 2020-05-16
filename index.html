@@ -29,7 +29,7 @@
         video: {},
         canvas: {},
         captures: [],
-        version: 'change size',
+        version: 'change aspectRatio',
         front: false,
       },
       computed: {
@@ -58,9 +58,9 @@
         },
         capture () {
           this.canvas = this.$refs.canvas
-          this.canvas.height = 1280
-          this.canvas.width = 720
-          this.canvas.getContext('2d').drawImage(this.video, 0, 0, 720, 1280)
+          this.canvas.height = 1000
+          this.canvas.width = 750
+          this.canvas.getContext('2d').drawImage(this.video, 0, 0, 750, 1000)
           this.captures.push(this.canvas.toDataURL('image/jpeg'))
           console.log(this.captures)
         },
