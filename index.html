@@ -8,6 +8,7 @@
 <body>
   <div id="app">
     <div v-text="version"></div>
+    <input v-model='devicePixelRatio' type="number" />
     <div>
       <video ref="video" id="video" width="100%" height="100%" autoplay></video>
       <button style="width: 100%;height: 100px;background: greenyellow;font-size: 2rem;font-weight: bold;" color="info" id="snap" v-on:click="capture()">撮る</button>
@@ -31,6 +32,7 @@
         captures: [],
         version: 'add window.devicePixelRatio',
         front: false,
+        devicePixelRatio: window.devicePixelRatio
       },
       computed: {
         constraints() {
@@ -58,8 +60,7 @@
         },
         capture () {
           this.canvas = this.$refs.canvas
-          var scale = window.devicePixelRatio;
-          alert(scale)
+          var scale = this.devicePixelRatio;
           this.canvas.height = this.video.clientHeight * scale
           this.canvas.width = this.video.clientWidth * scale
           console.log(scale)
