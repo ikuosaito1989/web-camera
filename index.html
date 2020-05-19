@@ -31,7 +31,7 @@
         video: {},
         canvas: {},
         captures: [],
-        version: 'set whiteBalanceMode manual',
+        version: 'set whiteBalanceMode continuous',
         front: false,
         devicePixelRatio: window.devicePixelRatio
       },
@@ -90,7 +90,7 @@
 
             try {
               const constraints = { advanced : [{
-                whiteBalanceMode : 'manual'
+                whiteBalanceMode : 'continuous'
               }]};
               await track.applyConstraints(constraints);
             }catch(e) {
