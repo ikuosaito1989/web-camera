@@ -31,7 +31,7 @@
         video: {},
         canvas: {},
         captures: [],
-        version: 'set whiteBalanceMode continuous',
+        version: 'set zoom 1',
         front: false,
         devicePixelRatio: window.devicePixelRatio
       },
@@ -79,7 +79,7 @@
           }
 
           navigator.mediaDevices.getUserMedia(this.constraints).then(async stream => {
-            await this.sleep(1000);
+            await this.sleep(500);
 
             const track = stream.getVideoTracks()[0];
             // ref. https://developer.mozilla.org/ja/docs/Web/API/MediaTrackConstraints#Properties_of_image_tracks
@@ -90,7 +90,7 @@
 
             try {
               const constraints = { advanced : [{
-                whiteBalanceMode : 'continuous'
+                zoom : { min: 1 }
               }]};
               await track.applyConstraints(constraints);
             }catch(e) {
