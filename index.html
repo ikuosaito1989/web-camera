@@ -32,7 +32,7 @@
         video: {},
         canvas: {},
         captures: [],
-        version: 'focusDistance 検証',
+        version: 'single-shot 検証',
         front: false,
         devicePixelRatio: window.devicePixelRatio
       },
@@ -108,9 +108,7 @@
             // input.hidden = false;
 
             try {
-              alert(capabilities.focusDistance.min)
-              alert(capabilities.focusDistance.max)
-              const constraints = { advanced : [{focusMode: "manual", focusDistance: 10}]};
+              const constraints = { advanced : [{focusMode: "single-shot"}]};
               await track.applyConstraints(constraints);
               
             }catch(e) {
