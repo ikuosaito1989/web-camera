@@ -31,7 +31,7 @@
         video: {},
         canvas: {},
         captures: [],
-        version: 'set continuous',
+        version: 'set single-shot',
         front: false,
         devicePixelRatio: window.devicePixelRatio
       },
@@ -90,7 +90,7 @@
 
             try {
               const constraints = { advanced : [{
-                focusMode : 'continuous',
+                focusMode : 'single-shot',
               }]};
               await track.applyConstraints(constraints);
             }catch(e) {
