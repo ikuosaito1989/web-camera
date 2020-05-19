@@ -87,11 +87,10 @@
             const settings = track.getSettings();
             alert("Capabilities: " + JSON.stringify(capabilities));
             alert("settings: " + JSON.stringify(settings));
-
-            alert('zoom max ->', capabilities.zoom.max)
+            
             try {
               const constraints = { advanced : [{
-                zoom : 2,
+                focusMode : 'single-shot',
               }]};
               await track.applyConstraints(constraints);
             }catch(e) {
