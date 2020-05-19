@@ -78,24 +78,27 @@
             });
           }
 
-          let constraints = navigator.mediaDevices.getSupportedConstraints();
-          console.log(constraints)
-          //　サポートされてるか調べる
-          if (constraints.focusMode) {
-            
-          }
+          navigator.mediaDevices.getUserMedia(this.constraints).then(async stream => {
+            await this.sleep(1000);
 
-          navigator.mediaDevices.getUserMedia(this.constraints).then(stream => {
             const track = stream.getVideoTracks()[0];
             // ref. https://developer.mozilla.org/ja/docs/Web/API/MediaTrackConstraints#Properties_of_image_tracks
-            const capabilities = track.getCapabilities()
-            console.log(capabilities)
-            alert("Capabilities: " + JSON.stringify(capabilities));
+            const capabilities = track.getCapabilities();
+            const settings = track.getSettings();
 
+            if (!('zoom' in capabilities)) {
+              alert('zoomは有効ではありません')
+            }
+
+            alert("Capabilities: " + JSON.stringify(capabilities));
+            alert("settings: " + JSON.stringify(settings));
             this.video.srcObject = stream
             this.video.play()
           })
         },
+        sleep(ms = 0) {
+          return new Promise(r => setTimeout(r, ms));
+        }
       }
     });
   </script>
