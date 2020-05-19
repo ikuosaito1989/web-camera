@@ -85,13 +85,20 @@
             // ref. https://developer.mozilla.org/ja/docs/Web/API/MediaTrackConstraints#Properties_of_image_tracks
             const capabilities = track.getCapabilities();
             const settings = track.getSettings();
-
-            if (!('zoom' in capabilities)) {
-              alert('zoomは有効ではありません')
-            }
-
             alert("Capabilities: " + JSON.stringify(capabilities));
             alert("settings: " + JSON.stringify(settings));
+
+            alert('zoom max ->', capabilities.zoom.max)
+            try {
+              const constraints = { advanced : [{
+                zoom : 2,
+              }]};
+              await track.applyConstraints(constraints);
+            }catch(e) {
+              alert(e.message)
+            }
+            
+
             this.video.srcObject = stream
             this.video.play()
           })
