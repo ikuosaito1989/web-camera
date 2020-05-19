@@ -32,7 +32,7 @@
         video: {},
         canvas: {},
         captures: [],
-        version: 'whiteBalanceMode 検証 5',
+        version: 'focusDistance 検証',
         front: false,
         devicePixelRatio: window.devicePixelRatio
       },
@@ -108,12 +108,9 @@
             // input.hidden = false;
 
             try {
-              alert(capabilities.colorTemperature.min)
-              alert(capabilities.colorTemperature.max)
-              const constraints = { advanced : [{
-                whiteBalanceMode: "manual",
-                colorTemperature: 7000,
-              }]};
+              alert(capabilities.focusDistance.min)
+              alert(capabilities.focusDistance.max)
+              const constraints = { advanced : [{focusMode: "manual", focusDistance: 10}]};
               await track.applyConstraints(constraints);
               
             }catch(e) {
