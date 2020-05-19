@@ -31,7 +31,7 @@
         video: {},
         canvas: {},
         captures: [],
-        version: 'set zoom 1',
+        version: 'set zoom 2',
         front: false,
         devicePixelRatio: window.devicePixelRatio
       },
@@ -90,7 +90,7 @@
 
             try {
               const constraints = { advanced : [{
-                zoom : { min: 1 }
+                zoom : { min: 2 }
               }]};
               await track.applyConstraints(constraints);
             }catch(e) {
