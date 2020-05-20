@@ -32,7 +32,7 @@
         video: {},
         canvas: {},
         captures: [],
-        version: 'single-shot 検証',
+        version: 'autofocus 検証',
         front: false,
         devicePixelRatio: window.devicePixelRatio
       },
@@ -108,7 +108,7 @@
             // input.hidden = false;
 
             try {
-              const constraints = { advanced : [{focusMode: "single-shot"}]};
+              const constraints = { advanced : [{focusMode: "auto"}]};
               await track.applyConstraints(constraints);
               
             }catch(e) {
