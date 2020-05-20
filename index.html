@@ -42,7 +42,7 @@
       video: {},
       canvas: {},
       captures: [],
-      version: 'zoom 検証',
+      version: 'exposureMode continuous 検証',
       zoom: '',
       front: false,
       devicePixelRatio: window.devicePixelRatio
@@ -120,7 +120,7 @@
           }
 
           try {
-            const constraints = { advanced : [{torch: false}]};
+            const constraints = { advanced : [{exposureMode: 'continuous'}]};
             await track.applyConstraints(constraints);
             
           }catch(e) {
