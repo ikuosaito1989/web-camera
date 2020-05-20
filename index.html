@@ -38,7 +38,7 @@
       video: {},
       canvas: {},
       captures: [],
-      version: 'bootstrap 検証',
+      version: 'focusDistance 検証',
       front: false,
       devicePixelRatio: window.devicePixelRatio
     },
@@ -98,18 +98,20 @@
           const input = document.querySelector('input[type="range"]');
 
           // Check whether zoom is supported or not.
-          if (capabilities.zoom) {
-            // Map zoom to a slider element.
-            input.min = capabilities.zoom.min;
-            input.max = capabilities.zoom.max;
-            input.step = capabilities.zoom.step;
-            input.value = settings.zoom;
+          if (capabilities.focusDistance) {
+            input.min = capabilities.focusDistance.min;
+            input.max = capabilities.focusDistance.max;
+            input.step = capabilities.focusDistance.step;
+            input.value = track.getSettings().focusDistance;
+
             input.oninput = function(event) {
-              track.applyConstraints({advanced: [ {zoom: event.target.value} ]});
+              track.applyConstraints({
+                advanced : [{focusMode: "manual", focusDistance: event.target.value}]
+              });
             }
             input.hidden = false;
           } else {
-            alert('ズームはサポートされてない')
+            alert('focusDistanceはサポートされてない')
           }
 
           // try {
