@@ -15,6 +15,10 @@
         <input v-model='devicePixelRatio' type="number" />
       </div>
       
+      <div>
+        <span>zoom : {{ zoom }}</span>
+      </div>
+
       <div style="text-align: center;">
         <video ref="video" id="video" width="100%" height="100%" autoplay></video>
         <input type="range" hidden style="width: 80%;height: 50px;">
@@ -38,7 +42,8 @@
       video: {},
       canvas: {},
       captures: [],
-      version: 'focusDistance 検証',
+      version: 'zoom 検証',
+      zoom: '',
       front: false,
       devicePixelRatio: window.devicePixelRatio
     },
@@ -97,29 +102,30 @@
           const input = document.querySelector('input[type="range"]');
 
           // Check whether zoom is supported or not.
-          if (capabilities.focusDistance) {
-            input.min = capabilities.focusDistance.min;
-            input.max = capabilities.focusDistance.max;
-            input.step = capabilities.focusDistance.step;
-            input.value = track.getSettings().focusDistance;
+          if (capabilities.zoom) {
+            input.min = capabilities.zoom.min;
+            input.max = capabilities.zoom.max;
+            input.step = capabilities.zoom.step;
+            input.value = track.getSettings().zoom;
 
-            input.oninput = function(event) {
+            input.oninput = (event) => {
+              this.zoom = event.target.value
               track.applyConstraints({
-                advanced : [{focusMode: "manual", focusDistance: event.target.value}]
+                advanced : [{focusMode: "manual", zoom: event.target.value}]
               });
             }
             input.hidden = false;
           } else {
-            alert('focusDistanceはサポートされてない')
+            alert('zoomはサポートされてない')
           }
 
-          try {
-            const constraints = { advanced : [{torch: false}]};
-            await track.applyConstraints(constraints);
+          // try {
+          //   const constraints = { advanced : [{torch: false}]};
+          //   await track.applyConstraints(constraints);
             
-          }catch(e) {
-            alert(e.message)
-          }
+          // }catch(e) {
+          //   alert(e.message)
+          // }
           
 
           this.video.srcObject = stream
