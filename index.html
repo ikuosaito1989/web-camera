@@ -1,153 +1,135 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-  <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">
-</head>
-
-<body>
-  <div id="app">
-    <div v-text="version">ver : {{ version }}</div>
-    <div>devicePixelRatio</div>
-    <input style="height: 100px;font-size: 2rem;" v-model='devicePixelRatio' type="number" />
-    <div>
-      <video ref="video" id="video" width="100%" height="100%" autoplay></video>
-      <input type="range" hidden>
-      <button style="width: 100%;height: 100px;background: greenyellow;font-size: 2rem;font-weight: bold;" color="info" id="snap" v-on:click="capture()">撮る</button>
-      <button style="width: 100%;height: 100px;background: darkgray; margin-top: 20px;font-size: 2rem;font-weight: bold;" @click="changeFacingMode()">カメラ切り替え</button>
-      <canvas ref="canvas" id="canvas"></canvas>
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  </head>
+  <body>
+    <div id="app">
+      <div v-text="version">ver : {{ version }}</div>
+      <div>
+        <span>devicePixelRatio : </span>
+        <input v-model='devicePixelRatio' type="number" />
+      </div>
       
-      <div class="capture" v-for="c in captures" v-bind:key="c.d">
-        <img v-bind:src="c"  width="100%" height="100%"/>
+      
+      <div>
+        <video ref="video" id="video" width="100%" height="100%" autoplay></video>
+        <input type="range" hidden>
+        <button style="width: 100%;height: 50px;background: greenyellow;font-weight: bold;" color="info" id="snap" v-on:click="capture()">撮る</button>
+        <button style="width: 100%;height: 50px;background: darkgray; margin-top: 5px;font-weight: bold;" @click="changeFacingMode()">カメラ切り替え</button>
+        <canvas ref="canvas" id="canvas"></canvas>
+        
+        <div class="capture" v-for="c in captures" v-bind:key="c.d">
+          <img v-bind:src="c"  width="100%" height="100%"/>
+        </div>
       </div>
     </div>
-    
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-  <script>
-    new Vue({
-      el: '#app',
-      data: {
-        video: {},
-        canvas: {},
-        captures: [],
-        version: 'none 検証',
-        front: false,
-        devicePixelRatio: window.devicePixelRatio
-      },
-      computed: {
-        constraints() {
-          return { 
-            video: { 
-              facingMode: (this.front? { exact: "environment" } : "user" ) ,
-              width: { ideal: 1000 },
-              height: { ideal: 750 },
-              aspectRatio: 4/3
-            }
-          }
-        },
-      },
-      mounted () {
-        this.video = this.$refs.video
-
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-          this._playVideo()
-        }
-      },
-      methods: {
-        changeFacingMode () {
-          this.front = !this.front
-          this._playVideo()
-        },
-        capture () {
-          this.canvas = this.$refs.canvas
-          var scale = this.devicePixelRatio;
-          this.canvas.height = this.video.clientHeight * scale
-          this.canvas.width = this.video.clientWidth * scale
-          console.log(scale)
-          this.canvas.getContext('2d').drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height)
-          this.captures.push(this.canvas.toDataURL('image/jpeg'))
-          console.log(this.captures)
-        },
-        _playVideo () {
-          if(this.video.srcObject){
-            this.video.srcObject.getVideoTracks().forEach(video => {
-              // ref. https://developer.mozilla.org/ja/docs/Web/API/MediaTrackConstraints#Properties_of_video_tracks
-              console.log('video -> ', video.getCapabilities())
-              video.stop();
-            });
-          }
-
-          navigator.mediaDevices.getUserMedia(this.constraints).then(async stream => {
-            await this.sleep(500);
-
-            const track = stream.getVideoTracks()[0];
-            // ref. https://developer.mozilla.org/ja/docs/Web/API/MediaTrackConstraints#Properties_of_image_tracks
-            const capabilities = track.getCapabilities();
-            const settings = track.getSettings();
-            alert("Capabilities: " + JSON.stringify(capabilities));
-            alert("settings: " + JSON.stringify(settings));
-
-            // const input = document.querySelector('input[type="range"]');
-
-            // // Check whether zoom is supported or not.
-            // if (!('zoom' in capabilities)) {
-            //   alert('ズームはサポートされてない')
-            // }
-
-            // // Map zoom to a slider element.
-            // input.min = capabilities.zoom.min;
-            // input.max = capabilities.zoom.max;
-            // input.step = capabilities.zoom.step;
-            // input.value = settings.zoom;
-            // input.oninput = function(event) {
-            //   alert(event.target.value)
-            //   track.applyConstraints({advanced: [ {zoom: event.target.value} ]});
-            // }
-            // input.hidden = false;
-
-            try {
-              const constraints = { advanced : [{focusMode: "none"}]};
-              await track.applyConstraints(constraints);
-              
-            }catch(e) {
-              alert(e.message)
-            }
-            
-
-            this.video.srcObject = stream
-            this.video.play()
-          })
-        },
-        sleep(ms = 0) {
-          return new Promise(r => setTimeout(r, ms));
-        }
-      }
-    });
-  </script>
-
-</body>
+  </body>
 </html>
 
-<style>
-body {
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
-}
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+  new Vue({
+    el: '#app',
+    data: {
+      video: {},
+      canvas: {},
+      captures: [],
+      version: 'bootstrap 検証',
+      front: false,
+      devicePixelRatio: window.devicePixelRatio
+    },
+    computed: {
+      constraints() {
+        return { 
+          video: { 
+            facingMode: (this.front? { exact: "environment" } : "user" ) ,
+            width: { ideal: 1000 },
+            height: { ideal: 750 },
+            aspectRatio: 4/3
+          }
+        }
+      },
+    },
+    mounted () {
+      this.video = this.$refs.video
 
-#canvas {
-  display: none;
-}
-.capture {
-  /* display: inline; */
-  padding: 5px;
-}
-</style>
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        this._playVideo()
+      }
+    },
+    methods: {
+      changeFacingMode () {
+        this.front = !this.front
+        this._playVideo()
+      },
+      capture () {
+        this.canvas = this.$refs.canvas
+        var scale = this.devicePixelRatio;
+        this.canvas.height = this.video.clientHeight * scale
+        this.canvas.width = this.video.clientWidth * scale
+        console.log(scale)
+        this.canvas.getContext('2d').drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height)
+        this.captures.push(this.canvas.toDataURL('image/jpeg'))
+        console.log(this.captures)
+      },
+      _playVideo () {
+        if(this.video.srcObject){
+          this.video.srcObject.getVideoTracks().forEach(video => {
+            // ref. https://developer.mozilla.org/ja/docs/Web/API/MediaTrackConstraints#Properties_of_video_tracks
+            console.log('video -> ', video.getCapabilities())
+            video.stop();
+          });
+        }
+
+        navigator.mediaDevices.getUserMedia(this.constraints).then(async stream => {
+          await this.sleep(500);
+
+          const track = stream.getVideoTracks()[0];
+          // ref. https://developer.mozilla.org/ja/docs/Web/API/MediaTrackConstraints#Properties_of_image_tracks
+          const capabilities = track.getCapabilities();
+          const settings = track.getSettings();
+          alert("Capabilities: " + JSON.stringify(capabilities));
+          alert("settings: " + JSON.stringify(settings));
+
+          const input = document.querySelector('input[type="range"]');
+
+          // Check whether zoom is supported or not.
+          if (capabilities.zoom) {
+            // Map zoom to a slider element.
+            input.min = capabilities.zoom.min;
+            input.max = capabilities.zoom.max;
+            input.step = capabilities.zoom.step;
+            input.value = settings.zoom;
+            input.oninput = function(event) {
+              alert(event.target.value)
+              track.applyConstraints({advanced: [ {zoom: event.target.value} ]});
+            }
+            input.hidden = false;
+          } else {
+            alert('ズームはサポートされてない')
+          }
+
+          // try {
+          //   const constraints = { advanced : [{focusMode: "none"}]};
+          //   await track.applyConstraints(constraints);
+            
+          // }catch(e) {
+          //   alert(e.message)
+          // }
+          
+
+          this.video.srcObject = stream
+          this.video.play()
+        })
+      },
+      sleep(ms = 0) {
+        return new Promise(r => setTimeout(r, ms));
+      }
+    }
+  });
+</script>
