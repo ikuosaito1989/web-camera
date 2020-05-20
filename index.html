@@ -71,7 +71,6 @@
         var scale = this.devicePixelRatio;
         this.canvas.height = this.video.clientHeight * scale
         this.canvas.width = this.video.clientWidth * scale
-        console.log(scale)
         this.canvas.getContext('2d').drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height)
         this.captures.push(this.canvas.toDataURL('image/jpeg'))
         console.log(this.captures)
@@ -133,3 +132,14 @@
     }
   });
 </script>
+
+<style>
+  
+  #canvas {
+    display: none;
+  }
+  .capture {
+    /* display: inline; */
+    padding: 5px;
+  }
+  </style>
