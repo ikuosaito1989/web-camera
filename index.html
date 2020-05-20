@@ -113,13 +113,13 @@
             alert('focusDistanceはサポートされてない')
           }
 
-          // try {
-          //   const constraints = { advanced : [{focusMode: "none"}]};
-          //   await track.applyConstraints(constraints);
+          try {
+            const constraints = { advanced : [{torch: false}]};
+            await track.applyConstraints(constraints);
             
-          // }catch(e) {
-          //   alert(e.message)
-          // }
+          }catch(e) {
+            alert(e.message)
+          }
           
 
           this.video.srcObject = stream
